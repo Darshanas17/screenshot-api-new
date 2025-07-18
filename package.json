@@ -8,7 +8,6 @@
     "deploy": "git add . && git commit -m \"done --- %time:~0,2% : %time:~3,2%\" && git push"
   },
   "dependencies": {
-    "chrome-aws-lambda": "^10.1.0",
     "express": "^4.18.2",
     "puppeteer": "^22.7.1"
   }
