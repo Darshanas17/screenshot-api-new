@@ -1,14 +1,15 @@
 {
   "name": "screenshot-api",
   "version": "1.0.0",
-  "description": "Simple screenshot API using Puppeteer",
+  "description": "Website Screenshot API using Puppeteer",
   "main": "index.cjs",
+  "type": "commonjs",
   "scripts": {
     "start": "node index.cjs",
     "deploy-my": "git add . && git commit -m \"done --- %time:~0,2% : %time:~3,2%\" && git push"
   },
   "dependencies": {
     "express": "^4.18.2",
-    "puppeteer": "^22.0.0"
+    "puppeteer": "^22.7.1"
   }
 }

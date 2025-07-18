@@ -14,19 +14,20 @@ app.get("/screenshot", async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      executablePath: "/path/to/Chrome",
+      headless: "new",
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
 
-    const screenshotBuffer = await page.screenshot({ fullPage: true });
+    const buffer = await page.screenshot({ fullPage: true });
     await browser.close();
 
-    res.set("Content-Type", "image/png").send(screenshotBuffer);
+    res.type("image/png").send(buffer);
   } catch (err) {
-    console.error("❌1 Screenshot error:", err.message);
-    res.status(500).send("Screenshot failed");
+    console.error("❌ Screenshot error!:", err);
+    res.status(500).send("Screenshot failed!");
   }
 });
 
