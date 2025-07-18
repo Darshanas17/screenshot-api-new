@@ -4,7 +4,7 @@
   "description": "Simple screenshot API using Puppeteer",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.cjs",
     "deploy": "git add . && git commit -m \"done --- %time:~0,2% : %time:~3,2%\" && git push"
   },
   "dependencies": {
