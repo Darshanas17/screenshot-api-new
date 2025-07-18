@@ -4,6 +4,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node index.js",
+    "postinstall": "npx playwright install",
     "deploy-my": "git add . && git commit -m \"done --- %time:~0,2% : %time:~3,2%\" && git push"
   },
   "dependencies": {
