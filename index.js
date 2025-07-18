@@ -1,11 +1,11 @@
 const express = require("express");
-const puppeteer = require("puppeteer");
+const { chromium } = require("playwright");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.send("✅ Screenshot API is running!");
+  res.send("✅ Screenshot API using Playwright is running!");
 });
 
 app.get("/screenshot", async (req, res) => {
@@ -13,24 +13,20 @@ app.get("/screenshot", async (req, res) => {
   if (!url) return res.status(400).send("❌ URL is required");
 
   try {
-    const browser = await puppeteer.launch({
-      headless: "new",
+    const browser = await chromium.launch({
+      headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle2", timeout: 0 });
-
+    await page.goto(url, { waitUntil: "networkidle" });
     const buffer = await page.screenshot({ fullPage: true });
     await browser.close();
 
     res.type("image/png").send(buffer);
   } catch (err) {
-    console.error("❌ Screenshot error!:", err);
-    res.status(500).send("Screenshot failed!");
+    console.error("❌ Screenshot error:", err);
+    res.status(500).send("Screenshot failed123", err);
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
