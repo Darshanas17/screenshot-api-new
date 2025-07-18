@@ -10,9 +10,12 @@ app.get("/", (req, res) => {
 
 app.get("/screenshot", async (req, res) => {
   const { url } = req.query;
-  if (!url) return res.status(400).send("❌ URL is required");
+  if (!url) {
+    return res.status(400).send("❌ URL is required");
+  }
 
   try {
+    // Launch Chrome with Render-friendly flags
     const browser = await puppeteer.launch({
       headless: true,
       args: [
@@ -27,14 +30,16 @@ app.get("/screenshot", async (req, res) => {
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
 
-    const buffer = await page.screenshot({ fullPage: true });
+    const screenshotBuffer = await page.screenshot({ fullPage: true });
     await browser.close();
 
-    res.type("image/png").send(buffer);
-  } catch (err) {
-    console.error("❌ Screenshot error:", err.stack || err);
+    res.type("image/png").send(screenshotBuffer);
+  } catch (error) {
+    console.error("❌ Screenshot error:", error);
     res.status(500).send("Screenshot failed");
   }
 });
 
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
