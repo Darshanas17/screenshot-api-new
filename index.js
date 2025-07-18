@@ -1,5 +1,5 @@
-import express from "express";
-import puppeteer from "puppeteer";
+const express = require("express");
+const puppeteer = require("puppeteer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,20 +10,18 @@ app.get("/", (req, res) => {
 
 app.get("/screenshot", async (req, res) => {
   const { url } = req.query;
-  if (!url) {
-    return res.status(400).send("❌ URL is required");
-  }
+  if (!url) return res.status(400).send("❌ URL is required");
 
   try {
-    // Launch Chrome with Render-friendly flags
     const browser = await puppeteer.launch({
       headless: true,
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
         "--disable-dev-shm-usage",
-        "--single-process",
+        "--disable-gpu",
         "--no-zygote",
+        "--single-process",
       ],
     });
 
@@ -33,9 +31,9 @@ app.get("/screenshot", async (req, res) => {
     const screenshotBuffer = await page.screenshot({ fullPage: true });
     await browser.close();
 
-    res.type("image/png").send(screenshotBuffer);
-  } catch (error) {
-    console.error("❌ Screenshot error:", error);
+    res.set("Content-Type", "image/png").send(screenshotBuffer);
+  } catch (err) {
+    console.error("❌ Screenshot error:", err);
     res.status(500).send("Screenshot failed");
   }
 });
